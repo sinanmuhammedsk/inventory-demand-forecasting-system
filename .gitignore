@@ -6,7 +6,8 @@ venv/
 # Jupyter notebooks
 .ipynb_checkpoints/
 # Data files
-*.csv
+# *.csv
+!dataset/raw/*.csv
 *.sqlite3
 *.db
 # Model artifacts

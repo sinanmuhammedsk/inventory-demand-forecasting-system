@@ -212,4 +212,4 @@ def render_recommendations_page(db):
             "Expected Demand (30D)": "${:,}",
             "Reorder Point (ROP)": "{:,}",
             "Recommended Order": "{:,}"
-        }), use_container_width=True)
+        }), width='stretch')

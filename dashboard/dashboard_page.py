@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from dashboard.mappings import STORE_CITIES
+import os
 
 def render_dashboard_page(db):
     st.markdown("<h1 style='text-align: center; margin-bottom: 5px;'><span style='color: #0071CE;'>Walmart</span> <span style='color: #FFC220;'>✵</span> <span style='color: #0F172A;'>Enterprise Business Intelligence Dashboard</span></h1>", unsafe_allow_html=True)
@@ -183,7 +184,7 @@ def render_dashboard_page(db):
                 yaxis=dict(gridcolor='#E5E7EB'),
                 xaxis=dict(gridcolor='#E5E7EB')
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         except Exception as e:
             st.error(f"Error loading sales trend chart: {e}")
         finally:
@@ -194,7 +195,7 @@ def render_dashboard_page(db):
         conn = db.get_connection()
         try:
             # Map Store to Type and Size
-            stores_df = pd.read_csv(r"d:\forecast\dataset\raw\stores.csv")
+            stores_df = pd.read_csv(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "dataset", "raw", "stores.csv"))
             stores_df.columns = stores_df.columns.str.lower()
             
             store_query = "SELECT store, SUM(weekly_sales) as Sales FROM sales_data GROUP BY store"
@@ -218,7 +219,7 @@ def render_dashboard_page(db):
                 paper_bgcolor='rgba(0,0,0,0)',
                 legend=dict(orientation="h", yanchor="bottom", y=-0.1, xanchor="center", x=0.5)
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         except Exception as e:
             st.error(f"Error loading store type pie chart: {e}")
         finally:
@@ -259,7 +260,7 @@ def render_dashboard_page(db):
                 paper_bgcolor='rgba(0,0,0,0)',
                 xaxis=dict(gridcolor='#334155')
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         except Exception as e:
             st.error(f"Error loading top stores chart: {e}")
         finally:
@@ -311,7 +312,7 @@ def render_dashboard_page(db):
                 paper_bgcolor='rgba(0,0,0,0)',
                 yaxis=dict(gridcolor='#334155')
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         except Exception as e:
             st.error(f"Error loading seasonal chart: {e}")
         finally:

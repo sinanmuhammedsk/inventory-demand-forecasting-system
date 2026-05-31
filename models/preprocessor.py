@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder
 
 class WalmartPreprocessor:
-    def __init__(self, raw_dir=r"d:\forecast\dataset\raw", processed_dir=r"d:\forecast\dataset\processed"):
+    def __init__(self, raw_dir=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "dataset", "raw"), processed_dir=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "dataset", "processed")):
         self.raw_dir = raw_dir
         self.processed_dir = processed_dir
         self.label_encoders = {}

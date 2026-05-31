@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 # Paths
-DATA_DIR = r"d:\forecast\dataset\raw"
+DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "raw")
 REPORT_PATH = r"d:\forecast\reports\data_profiling_report.md"
 
 def profile_dataset():

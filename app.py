@@ -60,9 +60,32 @@ hr {
 
 
 # Initialize Database Manager
+import os
+import sys
+
+# Ensure project root on sys.path for direct script imports
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "")))
+
+# Import seed function for auto‑seeding on fresh deployments
+from database.seed_data import seed
+
+# Initialize Database Manager
 if "db" not in st.session_state:
     db = DatabaseManager()
     db.init_db()
+    # Safe check for existing rows in sales_data; seed if empty or table missing
+    try:
+        conn = db.get_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) FROM sales_data")
+        count = cur.fetchone()[0]
+        conn.close()
+        if count == 0:
+            st.info("Seeding database for the first time…")
+            seed()
+    except Exception as e:
+        st.warning(f"Database check failed ({e}); attempting seeding.")
+        seed()
     st.session_state.db = db
 else:
     db = st.session_state.db

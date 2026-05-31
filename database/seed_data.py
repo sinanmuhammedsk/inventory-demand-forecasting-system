@@ -1,13 +1,18 @@
 import os
+import sys
 import pandas as pd
 import sqlite3
+
+# Ensure the project root is on the import path when this script is run directly
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from database.db_manager import DatabaseManager
 
 def seed():
     print("Starting database seeding...")
     db = DatabaseManager()
     db.init_db()
-    
+
     # Check if sales_data already has rows
     conn = db.get_connection()
     cursor = conn.cursor()
@@ -19,22 +24,23 @@ def seed():
         count = 0
     finally:
         conn.close()
-        
+
     if count > 0:
         print(f"Database already seeded with {count:,} records. Skipping.")
         return
-        
-    processed_path = r"d:\forecast\dataset\processed\analytical_dataset.csv"
+
+    # Correct relative path to the processed analytical dataset
+    processed_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "..",
+        "dataset",
+        "processed",
+        "analytical_dataset.csv",
+    )
     if os.path.exists(processed_path):
         print(f"Loading processed dataset from {processed_path}...")
-        # Load data
         df = pd.read_csv(processed_path)
-        
-        # Ensure correct date format
         df['Date'] = pd.to_datetime(df['Date'])
-        
-        # We can seed a high-quality subset or the entire set.
-        # SQLite handles 420k rows easily, but let's seed all of it to provide a production-quality BI experience.
         db.bulk_insert_sales_data(df)
         print("Database seeding completed successfully.")
     else:

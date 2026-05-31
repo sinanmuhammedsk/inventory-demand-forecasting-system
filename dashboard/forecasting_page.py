@@ -7,16 +7,16 @@ from dashboard.mappings import get_store_label, get_dept_label
 import io
 
 @st.cache_resource
-def get_predictor():
-    return DemandPredictor()
+def get_predictor(_db):
+    return DemandPredictor(db=_db)
 
 def render_forecasting_page(db):
     st.markdown("<h1 style='text-align: center; color: #FFC220; margin-bottom: 5px;'>Predictive Demand Forecasting Engine</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #94A3B8; font-size:1.05rem;'>Generate future sales forecasts using the optimized Random Forest ensemble model</p>", unsafe_allow_html=True)
     st.markdown("---")
-    
-    # Initialize Predictor
-    predictor = get_predictor()
+
+    # Initialize Predictor (passes db so statistical fallback can build from DB data)
+    predictor = get_predictor(db)
     
     # Load unique store-dept lists for selectboxes
     conn = db.get_connection()

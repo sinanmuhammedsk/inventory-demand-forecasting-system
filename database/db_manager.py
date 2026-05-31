@@ -1,4 +1,5 @@
 import os
+import tempfile
 import sqlite3
 import datetime
 import pandas as pd
@@ -19,7 +20,8 @@ class DatabaseManager:
         self.mysql_port = int(os.environ.get("MYSQL_PORT", 3306))
         
         # Use a path relative to the project root for cross‑platform compatibility
-        self.sqlite_db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "database", "inventory_forecast.db")
+        # Use a temporary writable directory for SQLite DB (required on read‑only deployments like Streamlit Cloud)
+        self.sqlite_db_path = os.path.join(tempfile.gettempdir(), "inventory_forecast.db")
         self.db_mode = "SQLITE"
         
         # Check if we should use MySQL
